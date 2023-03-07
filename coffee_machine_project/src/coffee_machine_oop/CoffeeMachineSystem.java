@@ -15,8 +15,8 @@ public class CoffeeMachineSystem {
 		showMenu(); // 메뉴 출력
 		coinCheck(); // 도전입력 & 체크
 		showOrderMenu(); // 주문가능 메뉴 출력
-		orderMenu(); // 메뉴 주문
-		getMenu(calChange());
+//		orderMenu(); // 메뉴 주문
+//		getMenu(calChange());
 		
 	}
 	
@@ -25,51 +25,67 @@ public class CoffeeMachineSystem {
 		System.out.println("주문하신 메뉴 "+ choice_menu.getName() + "입니다");
 		System.out.println("잔돈은 " + change + "입니다");
 		
-		if(change>=200) {
-			System.out.print("더 주문하겠습니까?? (주문:아무키, 종료:n)");
-			String con = scan.next();
-			if(con.equals("n")) {
-				System.exit(0);
-			}else {
-				coin = change;
-				showOrderMenu();
-			}
+		System.out.print("더 주문하겠습니까?? (주문:아무키, 종료:n)");
+		String con = scan.next();
+		if(!con.equals("n")) {
+			coin = change;
+			showOrderMenu();
+		}else {
+			System.out.println("=== 프로그램 종료 ===");
+			System.exit(0);
 		}
 	}
 	
 	public int calChange() {
 		System.out.println("=== 잔돈 계산 중입니다 ===");
-		if(coin>choice_menu.getPrice()) {
+		if(coin>=choice_menu.getPrice()) {
 			change = coin - choice_menu.getPrice();
 		}
 		return change;
 	}
 	
 	public void orderMenu() {
+		showMenu();
 		System.out.print("메뉴를 선택해주세요(번호) >> ");
 		int menu = scan.nextInt();
 		
-		switch(menu) {
-		case 1:
-			choice_menu = menuList[menu-1]; // menuList[???]
-			break;
-		case 2:
+		if(coin>=400 && menu==1) {
 			choice_menu = menuList[menu-1];
-			break;
-		case 3:
+		}else if(coin>=300 && menu==2) {
 			choice_menu = menuList[menu-1];
-			break;
-		case 4:
+		}else if(coin>=300 && menu==3) {
 			choice_menu = menuList[menu-1];
-			break;
-		case 0:
-			System.out.println("=== 프로그램을 종료합니다 ===");
-			System.exit(0);
-		default:
+		}else if(coin>=200 && menu==4) {
+			choice_menu = menuList[menu-1];
+		}else {
 			System.out.println("잘못입력하셨습니다. 다시 메뉴를 선택해주세요(숫자)");
+			orderMenu();
 		}
-		System.out.print("선택하신 메뉴는 " + choice_menu.getName() + "이고 ,");
-		System.out.println("가격은 " + choice_menu.getPrice() + "원 입니다");
+		getMenu(calChange());
+		
+//		switch(menu) {
+//		case 1:
+//			choice_menu = menuList[menu-1]; // menuList[???]
+//			break;
+//		case 2:
+//			choice_menu = menuList[menu-1];
+//			break;
+//		case 3:
+//			choice_menu = menuList[menu-1];
+//			break;
+//		case 4:
+//			choice_menu = menuList[menu-1];
+//			break;
+//		case 0:
+//			System.out.println("=== 프로그램을 종료합니다 ===");
+//			System.exit(0);
+//		default:
+//			System.out.println("잘못입력하셨습니다. 다시 메뉴를 선택해주세요(숫자)");
+//		}
+//		System.out.print("선택하신 메뉴는 " + choice_menu.getName() + "이고 ,");
+//		System.out.println("가격은 " + choice_menu.getPrice() + "원 입니다");
+//		
+//		getMenu(calChange());
 	}
 	
 	public void showOrderMenu() {
@@ -122,6 +138,7 @@ public class CoffeeMachineSystem {
 		}
 		System.out.println("0. 프로그램 종료");
 		System.out.println("=============================");
+		
 	}
 	
 	public void init() {
