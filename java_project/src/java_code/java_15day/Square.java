@@ -7,6 +7,7 @@ public class Square extends Shape {
 		this.color = color;
 	}
 	
+	@Override
 	public void draw() {
 		System.out.println(color+"사각형을 그린다");
 	}
