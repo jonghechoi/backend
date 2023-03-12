@@ -1,10 +1,13 @@
 package book_market;
 import java.util.ArrayList;
 
-public class CartMgm {
+/*
+ * 카트에서 처리되는 모든 작업들은 CartMgm 클래스에서 구현
+ */
+public class CartMgm implements CartMgmOperation {
 	// Field
 	ArrayList<BookVo> cartList;
-	ArrayList<CartItemVo> cartItemList;
+	public ArrayList<CartItemVo> cartItemList;
 	
 	public CartMgm() {
 		cartList = new ArrayList<BookVo>();
@@ -27,15 +30,15 @@ public class CartMgm {
 	}
 	
 	public void showList() {
-		System.out.println("*****************************************");
+		System.out.println("***********************************************");
 		System.out.println("\t도서ISBN\t|\t수량\t|\t합계");
-		System.out.println("*****************************************");
+		System.out.println("***********************************************");
 		for(CartItemVo item : cartItemList) {
 			System.out.print("\t" + item.getIsbn() + " | ");
 			System.out.print("\t" + item.getQty() + "\t | ");
 			System.out.print("\t" + item.getTotalPrice() + "\t \n");
 		}
-		System.out.println("*****************************************");
+		System.out.println("***********************************************");
 	}
 	
 	public boolean insert(BookVo book) {

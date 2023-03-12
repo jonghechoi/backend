@@ -3,8 +3,8 @@ import java.util.ArrayList;
 
 
 /*
- * 도서 관리 담당
- * @author jh
+ * 도서 등록/삭제/업데이트 등 도서와 관련된 모든 작업은 BookMgm 클래스에서 구현
+ * 
  */
 public class BookMgm {
 	// Field
@@ -71,7 +71,7 @@ public class BookMgm {
 			bookList.add(bookvo);
 		}
 		
-		System.out.println("상품목록 확인 완료");
+		System.out.println("상품목록 추가 완료");
 	}
 	
 }

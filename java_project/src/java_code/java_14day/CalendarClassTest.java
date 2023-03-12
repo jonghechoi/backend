@@ -8,6 +8,7 @@ public class CalendarClassTest {
 		System.out.println(cal.YEAR); // 상수 출력 --> 1
 		System.out.println(cal.MONTH);// 상수 출력 --> 2
 		System.out.println("year - " + cal.get(Calendar.YEAR)); // calendar.YEAR=1 출력
+		System.out.println("year - " + cal.get(cal.YEAR)); // calendar.YEAR=1 출력
 		System.out.println("month - " + (cal.get(Calendar.MONTH)+1)); 
 		System.out.println("date - " + cal.get(Calendar.DATE)); 
 		System.out.println(cal.getTime());

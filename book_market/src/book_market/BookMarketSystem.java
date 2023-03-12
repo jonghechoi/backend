@@ -1,14 +1,16 @@
 package book_market;
 import java.util.ArrayList;
 import java.util.Scanner;
+import order.*;
 
 // 모든 시스템을 관리하는 클래스
 public class BookMarketSystem extends BookMarketSystemOperationAdapter implements BookMarketSystemOperation {
 	// Field
-	static UserVo user;
-	static Scanner scan;
+	public static UserVo user;
+	public static Scanner scan;
 	static BookMgm bm; // 같은 패키지안에 있으므로
-	static CartMgm cm;
+	public static CartMgm cm;
+	static OrderMgm om;
 	
 	public static final int USER_INFO= 1;
 	public static final int CART_LIST= 2;
@@ -25,6 +27,8 @@ public class BookMarketSystem extends BookMarketSystemOperationAdapter implement
 		scan = new Scanner(System.in);
 		bm = new BookMgm();
 		cm = new CartMgm();
+		om = new OrderMgm();
+		
 		
 		userInsert();
 		showMenu();
@@ -42,9 +46,11 @@ public class BookMarketSystem extends BookMarketSystemOperationAdapter implement
 //	public void menuExit() {System.out.println("메뉴 종료");}				
 	
 	// Method
-	public void menuUserInfo() {
-		System.out.println("현재 고객 정보 : " + user.getName());
-		System.out.println("현재 고객 연락처 : " + user.getPhoneNumber());
+	public void showReceipt() {
+		System.out.print("배송받을 분은 고객정보와 같습니까? (Y|N) > ");
+		String yesno =  scan.next();
+		System.out.print("배송받을 고객명을 입력하세요 > ");
+		String name =  scan.next();
 	}
 	
 	public void choiceMenu() {
@@ -104,11 +110,17 @@ public class BookMarketSystem extends BookMarketSystemOperationAdapter implement
 		System.out.println("\tWelcome to Shopping Mall");
 		System.out.println("\tWelcome to Book market!!");
 		System.out.println("*********************************************");
-		System.out.println("1. 고객 정보 확인하기 \t\t2. 장바구니 상품 목록 보기");
+		System.out.println("1. 고객 정보 확인하기 \t2. 장바구니 상품 목록 보기");
 		System.out.println("3. 장바구니 비우기  \t\t4. 장바구니 항목 추가하기");
 		System.out.println("5. 장바구니 항목 삭제하기\t6. 장바구니 삭제하기");
 		System.out.println("7. 영수증 표시하기 \t\t8. 종료");
 		System.out.println("*********************************************");
+	}
+	
+	/**사용자 정보 확인**/
+	public void menuUserInfo() {
+		System.out.println("현재 고객 정보 : " + user.getName());
+		System.out.println("현재 고객 연락처 : " + user.getPhoneNumber());
 	}
 	
 	/**사용자 등록**/

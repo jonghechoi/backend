@@ -59,8 +59,16 @@ public class BookMarketSystemOperationAdapter implements BookMarketSystemOperati
 		}
 		
 	}	
+	
 	public void menuCartRemove() {System.out.println("장바구니 삭제");}		
-	public void menuCartBill() {System.out.println("영수증 표시");}			
+	
+	public void menuCartBill() {
+		System.out.println("영수증 표시");
+		
+		BookMarketSystem.om.insert();
+		BookMarketSystem.om.showOrderInfo();
+		
+	}			
 	public void menuExit() {System.out.println("메뉴 종료");}	
 }
  
