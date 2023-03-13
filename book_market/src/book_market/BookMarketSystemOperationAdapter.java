@@ -15,7 +15,7 @@ public class BookMarketSystemOperationAdapter implements BookMarketSystemOperati
 	}			
 	
 	public void menuCartClear() {
-		BookMarketSystem.cm.clearCart();
+		BookMarketSystem.cm.remove();
 	}	
 	
 	public void menuCartAdd() {
@@ -33,7 +33,7 @@ public class BookMarketSystemOperationAdapter implements BookMarketSystemOperati
 			if(cartAdd.equals("Y")) {
 				if(BookMarketSystem.cm.insert(book)) {
 					System.out.println("장바구니 추가 완료");
-					System.out.println(BookMarketSystem.cm.cartList.size());
+					System.out.println(BookMarketSystem.cm.getSize());
 				}else {
 					System.out.println("장바구니 추가 실패");
 				}
@@ -45,22 +45,41 @@ public class BookMarketSystemOperationAdapter implements BookMarketSystemOperati
 		}
 		
 	}			
-
+	
+	// 장바구니 수량 줄이기
 	public void menuCartRemoveItem() {
-		System.out.println("장바구니 항목 삭제");
-		menuCartList();
-		System.out.print ("장바구니에서 삭제할 도서의 ISBN을 입력하세요 : ");
-		String removeIsbn = BookMarketSystem.scan.next().toUpperCase();
-		System.out.println("+++++++++++++++++++++++++++ " + removeIsbn + " +++++++++++++++++++++++++++");
-		if(BookMarketSystem.cm.removeCartItem(removeIsbn)) {
-			System.out.println("--- 해당 도서 삭제 완료 ---");
+		if(BookMarketSystem.cm.getSize() != 0) {
+			BookMarketSystem.cm.showList();
+			System.out.print("수량을 차감할 도서의 ISBN을 입력해주세요 : ");
+			String isbn = BookMarketSystem.scan.next().toUpperCase();
+			System.out.print("수량을 입력해주세요 : ");
+			int qty = BookMarketSystem.scan.nextInt();
+			
+			BookMarketSystem.cm.updateQty(isbn, qty);
+			
 		}else {
-			System.out.println("--- 해당 도서 삭제 실패 ---");
+			System.out.println("--- 장바구니가 비어있습니다 ---");
 		}
 		
 	}	
 	
-	public void menuCartRemove() {System.out.println("장바구니 삭제");}		
+	// 장바구니 항목 삭제
+	public void menuCartRemove() {
+		if(BookMarketSystem.cm.getSize() != 0) {
+			BookMarketSystem.cm.showList();
+			System.out.print("장바구니에서 삭제할 도서의 isbn을 입력하세요 > ");
+			String isbn = BookMarketSystem.scan.next().toUpperCase();
+			
+			boolean result = BookMarketSystem.cm.remove(isbn);;
+			if(result) {
+				System.out.println("--- 해당 장바구니 항목 삭제 완료 ---");
+			}else {
+				System.out.println("--- 장바구니 항목 삭제 실패 ---");
+			}
+		}else {
+			System.out.println("--- 삭제할 데이터가 존재하지 않습니다 ---");
+		}
+	}		
 	
 	public void menuCartBill() {
 		System.out.println("영수증 표시");

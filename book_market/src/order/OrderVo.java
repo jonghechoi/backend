@@ -6,7 +6,7 @@ import book_market.*;
 public class OrderVo {
 	String address;
 	UserVo userInfo;
-	ArrayList<CartItemVo> cartItem;
+	Object cartItem;
 	
 	public String getAddress() {
 		return address;
@@ -20,10 +20,10 @@ public class OrderVo {
 	public void setUserInfo(UserVo userInfo) {
 		this.userInfo = userInfo;
 	}
-	public ArrayList<CartItemVo> getCartItem() {
+	public Object getCartItem() {
 		return cartItem;
 	}
-	public void setCartItem(ArrayList<CartItemVo> cartItem) {
+	public void setCartItem(Object cartItem) {
 		this.cartItem = cartItem;
 	}
 	

@@ -5,6 +5,7 @@ import java.util.Calendar;
 
 import book_market.BookMarketSystem;
 import book_market.CartItemVo;
+import book_market.CartMgm;
 
 /*
  * 영수증 출력 클래스
@@ -34,7 +35,8 @@ public class OrderMgm {
 		String address = BookMarketSystem.scan.next();
 		order.setAddress(address);
 		order.setUserInfo(BookMarketSystem.user);
-		order.setCartItem(BookMarketSystem.cm.cartItemList);
+//		order.setCartItem(BookMarketSystem.cm.cartItemList);
+		order.setCartItem(BookMarketSystem.cm.CopyCartItemList());
 		
 		orderList.add(order);
 	}
@@ -44,12 +46,14 @@ public class OrderMgm {
 		int total = 0;
 		System.out.println("-------------- 배송 받을 고객 정보 --------------");
 		System.out.println("고객명 : " + BookMarketSystem.user.getName() + "\t" + "연락처 : " + BookMarketSystem.user.getPhoneNumber());
-		System.out.println("배송지 : " + order.getAddress() + "\t" + "발송일 : " + cal.get(cal.MONTH) + "/" + cal.get(cal.DATE) + "/" + cal.get(cal.YEAR));
+		System.out.println("배송지 : " + order.getAddress() + "\t" + "발송일 : " + cal.get(cal.MONTH) + "/" 
+																		    + cal.get(cal.DATE) + "/"
+																		    + cal.get(cal.YEAR));
 		System.out.println(" 장바구니 상품 목록 : ");
 		System.out.println("-------------------------------------------");
 		System.out.println("\t도서ISBN\t|\t수량\t|\t합계");
 		System.out.println("-------------------------------------------");
-		for(int i=0; i<order.getCartItem().size(); i++) {
+		for(int i=0; i<order.getCartItem().; i++) {
 			for(OrderVo item : orderList) {
 				System.out.print("\t" + item.getCartItem().get(i).getIsbn() + " | ");
 				System.out.print("\t" + item.getCartItem().get(i).getQty() + "\t | ");
