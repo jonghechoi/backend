@@ -4,31 +4,25 @@ import java.util.ArrayList;
 import book_market.*;
 
 public class OrderVo {
-	String address;
-	UserVo userInfo;
-	Object cartItem;
+	String isbn;
+	int qty, totalPrice;
 	
-	public String getAddress() {
-		return address;
+	public String getIsbn() {
+		return isbn;
 	}
-	public void setAddress(String address) {
-		this.address = address;
+	public void setIsbn(String isbn) {
+		this.isbn = isbn;
 	}
-	public UserVo getUserInfo() {
-		return userInfo;
+	public int getQty() {
+		return qty;
 	}
-	public void setUserInfo(UserVo userInfo) {
-		this.userInfo = userInfo;
+	public void setQty(int qty) {
+		this.qty = qty;
 	}
-	public Object getCartItem() {
-		return cartItem;
+	public int getTotalPrice() {
+		return totalPrice;
 	}
-	public void setCartItem(Object cartItem) {
-		this.cartItem = cartItem;
+	public void setTotalPrice(int totalPrice) {
+		this.totalPrice = totalPrice;
 	}
-	
-
-
-
-	
 }

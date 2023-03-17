@@ -6,17 +6,34 @@ import java.util.ArrayList;
  */
 public class CartMgm implements CartMgmOperation {
 	// Field
-	private ArrayList<CartItemVo> cartItemList;
-	private Object CopyCartItemList;
+	private static ArrayList<CartItemVo> cartItemList;
+	public static CartItemVo item;
 	
 	public CartMgm() {
 		cartItemList = new ArrayList<CartItemVo>();
 	}
 	
-	// 영수증 처리를 위해 private으로 설정된 cartItemList 변수를 복제해서 그것을 돌려주자
-	public Object CopyCartItemList() {
-		CopyCartItemList = cartItemList.clone();
-		return CopyCartItemList;
+	// 영수증 처리를 위해 private으로 설정된 cartItemList의 값을 OrderMgm에 전달
+	public static String sendIsbn(int num) {
+		return cartItemList.get(num).getIsbn();
+	}
+	public static int sendQty(int num) {
+		return cartItemList.get(num).getQty();
+	}
+	public static int sendTotalPrice(int num) {
+		return cartItemList.get(num).getTotalPrice();
+	}
+	
+//	public static int getSize2() {
+//		return cartItemList.size();
+//	}
+	
+	public int getSize() {
+		int total = 0;
+		for(CartItemVo item : cartItemList) {
+			total += item.getQty();
+		}
+		return total;
 	}
 	
 	public void updateQty(String isbn, int qty) {
@@ -46,9 +63,6 @@ public class CartMgm implements CartMgmOperation {
 		}
 	}
 	
-	public int getSize() {
-		return cartItemList.size();
-	}
 	
 	public boolean remove(String isbn) {
 		boolean result = false; 
@@ -89,6 +103,9 @@ public class CartMgm implements CartMgmOperation {
 		return result;
 	}
 	
+	/* 
+	 *  장바구니 출력
+	 */
 	public void showList() {
 		System.out.println("***********************************************");
 		System.out.println("\t도서ISBN\t|\t수량\t|\t합계");
@@ -101,10 +118,25 @@ public class CartMgm implements CartMgmOperation {
 		System.out.println("***********************************************");
 	}
 	
+	/* 
+	 * 장바구니 주문리스트 출력
+	 */
+	public void showList(String order) {
+		int orderTotalPrice = 0;
+		System.out.println("***********************************************");
+		System.out.println("\t도서ISBN\t|\t수량\t|\t합계");
+		System.out.println("***********************************************");
+		for(CartItemVo item : cartItemList) {
+			System.out.print("\t" + item.getIsbn() + " | ");
+			System.out.print("\t" + item.getQty() + "\t | ");
+			System.out.print("\t" + item.getTotalPrice() + "\t \n");
+			orderTotalPrice += item.getTotalPrice();
+		}
+		System.out.println("***********************************************");
+		System.out.println("\t\t\t\t" + order + orderTotalPrice);
+	}
+	
 	public boolean insert(BookVo book) {
-//		boolean result = false;
-//		result = cartList.add(book);
-		
 		// isbn을 처음입력 or 기존에 없던 isbn
 		// vs
 		// 이미 cartItemList에 들어있는 isbn
@@ -130,9 +162,9 @@ public class CartMgm implements CartMgmOperation {
 			item.setTotalPrice(book.getPrice());
 			
 			cartItemList.add(item);
+			check = true;
 		}
 		
-//		return result;
 		return check;
 	}
 }		

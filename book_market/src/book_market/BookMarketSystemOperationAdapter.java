@@ -82,10 +82,55 @@ public class BookMarketSystemOperationAdapter implements BookMarketSystemOperati
 	}		
 	
 	public void menuCartBill() {
-		System.out.println("영수증 표시");
+		// 장바구니에 item이 하나라도 있는 경우에만 영수증 출력
+		if(BookMarketSystem.cm.getSize() != 0) {
+			System.out.print("배송받을 분의 고객정보와 같습니까? Y|N > ");
+			String userConfirm = BookMarketSystem.scan.next().toUpperCase();
+			BookMarketSystem.scan.nextLine();
+			OrderUserVo orderUser = new OrderUserVo();
+			if(userConfirm.equals("Y")) {
+				/*
+				 * user -> orderUser 변경
+				 */
+				orderUser = (OrderUserVo)BookMarketSystem.user;
+				
+				System.out.print("배송지를 입력해주세요 > ");
+				String addr = BookMarketSystem.scan.nextLine();
+				orderUser.setAddress(addr);
+				
+				System.out.println("-------------- 배송 받을 고객 정보 --------------");
+				System.out.print("고객명 : " + orderUser.getName() + "\t"); 
+				System.out.print("연락처 : " + orderUser.getPhoneNumber() + "\n");
+				System.out.print("배송지 : " + orderUser.getAddress() + "\t");
+				System.out.print("발송일 : " + orderUser.getDate() + "\n");
+				System.out.print("장바구니 상품 목록 : \n");
+				BookMarketSystem.cm.showList("주문 총금액 : ");
+			}else {
+				// orderUser 정보 입력 -> 이름, 연락처, 배송지
+				System.out.print("이름을 입력해주세요 > ");
+				orderUser.setName(BookMarketSystem.scan.next());
+				System.out.print("연락처를 입력해주세요 > ");
+				orderUser.setPhoneNumber(BookMarketSystem.scan.next());
+				BookMarketSystem.scan.nextLine();
+				System.out.print("배송지를 입력해주세요 > ");
+				orderUser.setAddress(BookMarketSystem.scan.nextLine());
+				
+				System.out.println("-------------- 배송 받을 고객 정보 --------------");
+				System.out.print("고객명 : " + orderUser.getName() + "\t"); 
+				System.out.print("연락처 : " + orderUser.getPhoneNumber() + "\n");
+				System.out.print("배송지 : " + orderUser.getAddress() + "\t");
+				System.out.print("발송일 : " + orderUser.getDate() + "\n");
+				System.out.print("장바구니 상품 목록 : \n");
+				BookMarketSystem.cm.showList("주문 총금액 : ");
+			}
+		}else {
+			System.out.println("--- 장바구니가 비어있습니다 ---");
+		}
 		
-		BookMarketSystem.om.insert();
-		BookMarketSystem.om.showOrderInfo();
+		
+		
+//		BookMarketSystem.om.insert();
+//		BookMarketSystem.om.showOrderInfo();
 		
 	}			
 	public void menuExit() {System.out.println("메뉴 종료");}	

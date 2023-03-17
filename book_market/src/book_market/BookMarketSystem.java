@@ -6,8 +6,8 @@ import order.*;
 // 모든 시스템을 관리하는 클래스
 public class BookMarketSystem extends BookMarketSystemOperationAdapter implements BookMarketSystemOperation {
 	// Field
-	public static UserVo user;
-	public static Scanner scan;
+	static UserVo user;
+	static Scanner scan;
 	static BookMgm bm; // 같은 패키지안에 있으므로
 	public static CartMgm cm;
 	static OrderMgm om;
@@ -23,7 +23,8 @@ public class BookMarketSystem extends BookMarketSystemOperationAdapter implement
 	
 	// Constructor
 	public BookMarketSystem()  {
-		user = new UserVo();
+		user = new OrderUserVo(); // 원래는 UserVo()이지만 나중에 주문고객으로 전환될 수 있으니 일단 자식 클래스로 생성함
+								  // 상속구조를 통해서 형변환을 진행하면 됨
 		scan = new Scanner(System.in);
 		bm = new BookMgm();
 		cm = new CartMgm();
@@ -110,7 +111,7 @@ public class BookMarketSystem extends BookMarketSystemOperationAdapter implement
 		System.out.println("\tWelcome to Shopping Mall");
 		System.out.println("\tWelcome to Book market!!");
 		System.out.println("*********************************************");
-		System.out.println("1. 고객 정보 확인하기 \t2. 장바구니 상품 목록 보기");
+		System.out.println("1. 고객 정보 확인하기 \t\t2. 장바구니 상품 목록 보기");
 		System.out.println("3. 장바구니 비우기  \t\t4. 장바구니 항목 추가하기");
 		System.out.println("5. 장바구니 수량 줄이기\t6. 장바구니 항목 삭제하기");
 		System.out.println("7. 영수증 표시하기 \t\t8. 종료");
