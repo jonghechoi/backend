@@ -1,4 +1,4 @@
-package book_market;
+package book_market2;
 
 public interface CartMgmOperation {
 	public boolean insert(BookVo book);

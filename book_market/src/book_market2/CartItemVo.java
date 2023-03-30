@@ -1,4 +1,4 @@
-package book_market;
+package book_market2;
 
 /*
  * 중복되는 도서가 있으면 수량을 늘려야 한다.

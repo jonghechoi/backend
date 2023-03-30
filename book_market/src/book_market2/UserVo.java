@@ -1,4 +1,4 @@
-package book_market;
+package book_market2;
 
 // 로그인하는 유저 정보가 저장되는 Vo, DTO
 public class UserVo {
