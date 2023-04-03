@@ -1,4 +1,4 @@
-package java_code.java_6day;
+package java_code.java_06day;
 import java.util.Scanner;
 
 public class ScoreTest2 {

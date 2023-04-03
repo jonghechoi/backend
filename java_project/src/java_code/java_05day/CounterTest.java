@@ -1,4 +1,4 @@
-package java_code.java_5day;
+package java_code.java_05day;
 import java.util.Scanner;
 
 public class CounterTest {

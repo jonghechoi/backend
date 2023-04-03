@@ -1,4 +1,4 @@
-package java_code.java_4day;
+package java_code.java_04day;
 
 public class ControlFlow_for¹® {
 

@@ -1,4 +1,4 @@
-package java_code.java_4day;
+package java_code.java_04day;
 import java.util.Scanner;
 
 public class ControlFlow_for¹®2 {

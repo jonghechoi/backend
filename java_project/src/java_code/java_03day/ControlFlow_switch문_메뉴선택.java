@@ -1,4 +1,4 @@
-package java_code.java_3day;
+package java_code.java_03day;
 import java.util.Scanner;
 
 public class ControlFlow_switch문_메뉴선택 {

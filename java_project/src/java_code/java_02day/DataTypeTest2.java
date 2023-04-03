@@ -1,4 +1,4 @@
-package java_code.java_2day;
+package java_code.java_02day;
 
 public class DataTypeTest2 {
 

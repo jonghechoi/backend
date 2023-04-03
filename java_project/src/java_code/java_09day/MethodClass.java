@@ -1,4 +1,4 @@
-package java_code.java_9day;
+package java_code.java_09day;
 
 public class MethodClass {
 	// Field

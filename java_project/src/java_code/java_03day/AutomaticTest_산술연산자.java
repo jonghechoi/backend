@@ -1,4 +1,4 @@
-package java_code.java_3day;
+package java_code.java_03day;
 
 public class AutomaticTest_산술연산자 {
 

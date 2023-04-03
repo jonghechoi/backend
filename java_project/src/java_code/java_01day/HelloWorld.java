@@ -1,4 +1,4 @@
-package java_code.java_1day;
+package java_code.java_01day;
 import java.util.Scanner;
 
 public class HelloWorld {

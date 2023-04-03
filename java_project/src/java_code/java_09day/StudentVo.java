@@ -1,4 +1,4 @@
-package java_code.java_9day;
+package java_code.java_09day;
 
 public class StudentVo {
 	// Field (전역/글로벌변수)

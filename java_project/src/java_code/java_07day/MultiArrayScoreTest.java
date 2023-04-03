@@ -1,4 +1,4 @@
-package java_code.java_7day;
+package java_code.java_07day;
 import java.util.Scanner;
 
 public class MultiArrayScoreTest {
