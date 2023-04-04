@@ -1,10 +1,10 @@
-package coding_test;
+package babbling;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.*;
 
-public class babbling {
+public class Babbling {
 
 	public static void main(String[] args) {
         int answer = 0;
@@ -25,12 +25,6 @@ public class babbling {
         answer = result1.length;
         
         System.out.println(answer);
-		
-        1	2	3	4
-        1	2	3	4
-        
-        12 13 14 21 23 24 31 32 34 41 42 43
-        
 	}
 
 }

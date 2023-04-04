@@ -101,16 +101,98 @@ public class ScoreDao {
 		}catch(Exception e) {
 			e.printStackTrace();
 		}
+		return list;
+	}
+	
+	/*
+	 * 수정, 삭제에서 학번 검색 기능
+	 */
+	public ScoreVo search(String sid, String fname) {
+		ScoreVo score = null; // 로컬변수는 jvm이 알아서 초기화해주지 않기 때문에 명시적으로 초기화 필요
+		
+		try {
+			getStatement();
+			String sql = "SELECT SID, NAME, KOR, ENG, MATH, SDATE" + 
+					"  FROM SCORE" + 
+					"  WHERE SID='" + sid + "'";
+			rs = stmt.executeQuery(sql);
+			
+			while(rs.next()) {
+				score = new ScoreVo();
+				score.setSid(rs.getString(1));
+				score.setName(rs.getString(2));
+				score.setKor(rs.getInt(3));
+				score.setEng(rs.getInt(4));
+				score.setMath(rs.getInt(5));
+				score.setSdate(rs.getString(6));
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return score;
+	}
+	
+	public ArrayList<ScoreVo> search(String name) {
+		ArrayList<ScoreVo> list = new ArrayList<ScoreVo>();
+		
+		try {
+			getStatement();
+			String sql = "SELECT SID, NAME, KOR, ENG, MATH, KOR+ENG+MATH TOT,"
+					+ " (KOR+ENG+MATH)/3.0 AVG, SDATE " + 
+					"  FROM SCORE " + 
+					"  WHERE NAME LIKE '%" + name + "%'";
+			rs = stmt.executeQuery(sql);
+			
+			while(rs.next()) {
+				ScoreVo score = new ScoreVo();
+				score.setSid(rs.getString(1));
+				score.setName(rs.getString(2));
+				score.setKor(rs.getInt(3));
+				score.setEng(rs.getInt(4));
+				score.setMath(rs.getInt(5));
+				score.setTot(rs.getDouble(6));
+				score.setAvg(rs.getDouble(7));
+				score.setSdate(rs.getString(8));
+				list.add(score);
+			}
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 		return list;
 	}
 	
-	public void update() {
+	public boolean update(ScoreVo score) {
+		boolean result = false;
 		
+		try {
+			getStatement();
+			String sql = " update score set kor="+score.getKor()
+						+" , eng="+score.getEng()
+						+" , math="+score.getMath()
+						+" where sid='"+ score.getSid()+"'";
+			int val = stmt.executeUpdate(sql);
+			if(val == 1) result = true;
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
 	}
 	
-	public void delete() {
+	public boolean delete(ScoreVo score) {
+		boolean result = false;
 		
+		try {
+			getStatement();
+			String sql = "DELETE FROM SCORE WHERE SID= '"+score.getSid()+"'";
+			System.out.println("sql -------->" +sql);
+			int val = stmt.executeUpdate(sql);
+			if(val == 1) result = true;
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
 	}
 	
 	// close

@@ -12,12 +12,13 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import score_mgm_oop_arrayList.ScoreMgmSystem;
+import score_db.ScoreDao;
 import score_mgm_oop_arrayList.ScoreVo;
 
 public class UpdateUI implements ActionListener{
 	//Field
-	ScoreMgmSystem sms;
+//	ScoreMgmSystem sms;
+	ScoreDao dao;
 	ScoremgmUI ui;
 	JTextField name_tf;
 	JButton btn_search, btn_update, btn_reset;
@@ -25,11 +26,22 @@ public class UpdateUI implements ActionListener{
 	
 	//Constructor
 	public UpdateUI() {}
+	
 	public UpdateUI(ScoremgmUI ui) {
 		this.ui = ui;
-		this.sms = ui.sms;
+		this.dao = ui.dao;
+//		this.sms = ui.sms;
 		init();
 	}
+	
+	public UpdateUI(ScoremgmUI ui, String sid) {
+		this.ui = ui;
+		this.dao = ui.dao;
+		init();
+		search_proc(sid);
+	}	
+	
+	
 //	public UpdateUI(ScoremgmUI ui, ScoreVO score) {
 //		this.ui = ui;
 //		init();
@@ -46,7 +58,7 @@ public class UpdateUI implements ActionListener{
 		ui.update_panel.setLayout(new BorderLayout());
 		
 		JPanel top_panel = new JPanel();
-		JLabel label = new JLabel("수정할 학생명");
+		JLabel label = new JLabel("수정할 학번");
 		name_tf = new JTextField(20);
 		btn_search = new JButton("search");
 		top_panel.add(label);
@@ -108,8 +120,11 @@ public class UpdateUI implements ActionListener{
 	 */
 	public void search_proc() {
 		if(validationCheck()) {
-			ScoreVo score = sms.search(name_tf.getText());
-			if(score != null) {
+			ScoreVo score = dao.search(name_tf.getText().trim().toLowerCase(), "update");
+			// 기존 dao.search()에서는 ScoreVo 객체를 new로 생성해서 값만 안 들어갔지 null은 아니게 됨
+			// 따라서 null로 초기화하고, score에 값이 들어갈 때 객체 할당해야 함
+			// 중요해!!!!!!!!!!
+			if(score != null) {  
 				tf_list.get(0).setText(score.getName());
 				tf_list.get(0).setEditable(false);
 				tf_list.get(1).setText(String.valueOf(score.getKor()));
@@ -119,6 +134,21 @@ public class UpdateUI implements ActionListener{
 			}else {
 				JOptionPane.showMessageDialog(null, "수정할 데이터가 존재하지 않습니다");
 			}
+		}
+	}
+	
+	public void search_proc(String sid) {
+		ScoreVo score = dao.search(sid, "update");
+		
+		if(score != null) {  
+			name_tf.setText(score.getSid());
+			name_tf.setEditable(false);
+			tf_list.get(0).setText(String.valueOf(score.getName()));
+			tf_list.get(1).setText(String.valueOf(score.getKor()));
+			tf_list.get(2).setText(String.valueOf(score.getEng()));
+			tf_list.get(3).setText(String.valueOf(score.getMath()));
+		}else {
+			JOptionPane.showMessageDialog(null, "수정할 데이터가 존재하지 않습니다");
 		}
 	}
 	
@@ -140,12 +170,12 @@ public class UpdateUI implements ActionListener{
 	 */
 	public void update_proc() {
 		ScoreVo update_score = new ScoreVo();
-		update_score.setName(tf_list.get(0).getText());
+		update_score.setSid(name_tf.getText().trim().toLowerCase());
 		update_score.setKor(Integer.parseInt(tf_list.get(1).getText()));
 		update_score.setEng(Integer.parseInt(tf_list.get(2).getText()));
 		update_score.setMath(Integer.parseInt(tf_list.get(3).getText()));
 
-		boolean result = sms.update(update_score);
+		boolean result = dao.update(update_score);
 		if(result) {
 			JOptionPane.showMessageDialog(null, "수정이 완료되었습니다");
 			new SelectUI(ui);

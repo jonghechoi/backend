@@ -12,12 +12,13 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import score_mgm_oop_arrayList.ScoreMgmSystem;
+import score_db.ScoreDao;
 import score_mgm_oop_arrayList.ScoreVo;
 
 public class DeleteUI implements ActionListener{
 	//Field
-	ScoreMgmSystem sms;
+//	ScoreMgmSystem sms;
+	ScoreDao dao;
 	ScoremgmUI ui;
 	JTextField name_tf;
 	JButton btn_search, btn_delete, btn_reset;
@@ -25,11 +26,20 @@ public class DeleteUI implements ActionListener{
 	
 	//Constructor
 	public DeleteUI() {}
+
 	public DeleteUI(ScoremgmUI ui) {
 		this.ui = ui;
-		this.sms = ui.sms;
+		this.dao = ui.dao;
+//		this.sms = ui.sms;
 		init();
 		
+	}
+	
+	public DeleteUI(ScoremgmUI ui, String sid) {
+		this.ui = ui;
+		this.dao = ui.dao;
+		init();
+		search_proc(sid);
 	}
 
 	public void init() {
@@ -38,7 +48,7 @@ public class DeleteUI implements ActionListener{
 		ui.delete_panel.setLayout(new BorderLayout());
 		
 		JPanel top_panel = new JPanel();
-		JLabel label = new JLabel("삭제할 학생명");
+		JLabel label = new JLabel("삭제할 학번");
 		name_tf = new JTextField(20);
 		btn_search = new JButton("search");
 		top_panel.add(label);
@@ -98,17 +108,40 @@ public class DeleteUI implements ActionListener{
 	 */
 	public void search_proc() {
 		if(validationCheck()) {
-			ScoreVo score = sms.search(name_tf.getText());
+			ScoreVo score = dao.search(name_tf.getText(), "delete");
 			if(score != null) {
 				tf_list.get(0).setText(score.getName());
 				tf_list.get(1).setText(String.valueOf(score.getKor()));
 				tf_list.get(2).setText(String.valueOf(score.getEng()));
 				tf_list.get(3).setText(String.valueOf(score.getMath()));
-				
 			}else {
+				tf_list.get(0).setText("");
+				tf_list.get(1).setText("");
+				tf_list.get(2).setText("");
+				tf_list.get(3).setText("");
 				JOptionPane.showMessageDialog(null, "삭제할 데이터가 존재하지 않습니다");
 			}
 		}
+	}
+	
+	public void search_proc(String sid) {
+		ScoreVo score = dao.search(sid, "delete");
+		
+		if(score != null) {
+			name_tf.setText(score.getSid());
+			name_tf.setEditable(false);
+			tf_list.get(0).setText(score.getName());
+			tf_list.get(1).setText(String.valueOf(score.getKor()));
+			tf_list.get(2).setText(String.valueOf(score.getEng()));
+			tf_list.get(3).setText(String.valueOf(score.getMath()));
+		}else {
+			tf_list.get(0).setText("");
+			tf_list.get(1).setText("");
+			tf_list.get(2).setText("");
+			tf_list.get(3).setText("");
+			JOptionPane.showMessageDialog(null, "삭제할 데이터가 존재하지 않습니다");
+		}
+		
 	}
 	
 	public boolean validationCheck() {
@@ -120,7 +153,6 @@ public class DeleteUI implements ActionListener{
 		}else {
 			result = true;
 		}
-		
 		return result;
 	}
 	
@@ -128,10 +160,11 @@ public class DeleteUI implements ActionListener{
 	 * 내용 : 삭제완료 기능
 	 */
 	public void delete_proc() {
-		
 		int choice = JOptionPane.showConfirmDialog(null, "정말로 삭제하시겠습니까?");
 		if(choice == 0) {
-			boolean result = sms.delete(name_tf.getText());
+			ScoreVo score = dao.search(name_tf.getText().trim().toLowerCase(), "delete");
+			
+			boolean result = dao.delete(score);
 			if(result) {
 				JOptionPane.showMessageDialog(null,"삭제가 완료되었습니다");
 				new SelectUI(ui);

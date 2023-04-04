@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -14,27 +16,29 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
-import score_mgm_oop_arrayList.ScoreMgmSystem;
+import score_db.ScoreDao;
 import score_mgm_oop_arrayList.ScoreVo;
 
 public class SearchUI implements ActionListener{
 	//Field
-	ScoreMgmSystem sms;
+//	ScoreMgmSystem sms;
+	ScoreDao dao;
 	ScoremgmUI ui;	
 	JTextField name_tf;
 	JButton btn_search, btn_update, btn_delete;
 	JPanel jp;
-	ScoreVo score;
-	String[] colNames = {"이름","국어","영어","수학","총점","평균"};
+	ArrayList<ScoreVo> searchList;
+	String[] colNames = {"학번","이름","국어","영어","수학","총점","평균"};
 	DefaultTableModel model = new DefaultTableModel(colNames, 0);
 	JTable table = new JTable(model);
-	Object[] row = new Object[6];
+	Object[] row = new Object[7];
 	
 	//Constructor
 	public SearchUI() {}
 	public SearchUI(ScoremgmUI ui) {
 		this.ui = ui;
-		this.sms = ui.sms;
+		this.dao = ui.dao;
+//		this.sms = ui.sms;
 		init();		
 	}
 	
@@ -81,19 +85,23 @@ public class SearchUI implements ActionListener{
 	 */
 	public void search_proc() {
 		if(validationCheck()) {
-			score = sms.search(name_tf.getText());
-			if(score != null) {
+			searchList = dao.search(name_tf.getText().trim());
+			if(searchList.size() != 0) {
 				jp.setVisible(true);
 				
-				DefaultTableModel model = new DefaultTableModel(colNames, 0);				
-				row[0] = score.getName();
-				row[1] = score.getKor();
-				row[2] = score.getEng();
-				row[3] = score.getMath();
-				row[4] = score.getTot();
-				row[5] = score.getAvg();
+				DefaultTableModel model = new DefaultTableModel(colNames, 0);
 				
-				model.addRow(row);
+				for(ScoreVo list : searchList) {
+					row[0] = list.getSid();
+					row[1] = list.getName();
+					row[2] = list.getKor();
+					row[3] = list.getEng();
+					row[4] = list.getMath();
+					row[5] = list.getTot();
+					row[6] = list.getAvg();
+					
+					model.addRow(row);
+				}
 				model.fireTableDataChanged();
 				
 				table.setModel(model);
@@ -129,13 +137,20 @@ public class SearchUI implements ActionListener{
 	 */
 	public void actionPerformed(ActionEvent e) {
 		Object obj = e.getSource();
+
+		
 		
 		if(obj == btn_search || obj == name_tf) {
 			search_proc();
 		}else if(obj == btn_update) {
-//			new UpdateUI(ui, score);
+			int rowNum = table.getSelectedRow();
+			String sid = searchList.get(rowNum).getSid();
+			System.out.println("sid ------------->"+sid);
+			new UpdateUI(ui, sid);
 		}else if(obj == btn_delete) {
-//			new DeleteUI(ui, score);
+			int rowNum = table.getSelectedRow();
+			String sid = searchList.get(rowNum).getSid();
+			new DeleteUI(ui, sid);
 		}
 	}
 	
