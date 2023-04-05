@@ -1,4 +1,4 @@
-package codingTest;
+package coding_test;
 
 public class 추억점수 {
 

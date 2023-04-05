@@ -1,30 +1,55 @@
 package coding_test;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+
 import java.util.*;
 
-public class Babbling {
-
-	public static void main(String[] args) {
+class Solution {
+    public int solution(String[] babbling) {
+        /*
+            1. saying 에서 만들 수 있는 모든 조건 만들어서 saying2에 넣고
+            2. babbling과 비교
+        */        
         int answer = 0;
-        String[] saying = {"aya", "ye", "woo", "ma"};
-        String[] result1 = {};
-        String[] result2 = {};
-        String[] result0 = {"ayayewooma"};
+        String[] sayingArray = {"aya", "ye", "woo", "ma"};
+        ArrayList<String> result = new ArrayList<String>();
         
-        // 2개 합성
-        int count = 0;
-        for(int i=0; i<saying.length; i++) {
-            for(int j=0; j<saying.length; j++) {
-                result1[count] = saying[i].concat(saying[j]);
-                count++;
+        ArrayList<String> sayingArrayList1 = new ArrayList<String>();
+        
+        for(String i : sayingArray) {
+        	sayingArrayList1.add(i);
+        }
+        
+        
+        
+        
+        for(int i=0; i<sayingArrayList1.size(); i++) {
+        	result.add(sayingArrayList1.get(i));
+        	for(int j=0; j<sayingArrayList1.size(); j++) {
+        		if(i!=j) {
+        			result.add(sayingArrayList1.get(i).concat(sayingArrayList1.get(j)));
+        			for(int x=0; x<sayingArrayList1.size(); x++) {
+        				if((x!=i)&&(x!=j)) {
+        					result.add(sayingArrayList1.get(i).concat(sayingArrayList1.get(j)).concat(sayingArrayList1.get(x)));
+        					for(int y=0; y<sayingArrayList1.size(); y++ ) {
+        						if((y!=i)&&(y!=j)&&(y!=x)) {
+        							result.add(sayingArrayList1.get(i).concat(sayingArrayList1.get(j)).concat(sayingArrayList1.get(x)).concat(sayingArrayList1.get(y)));
+        						}
+        					}
+        				}
+        			}
+        		}
+        		
+        	}
+        }
+
+        for(int i=0; i<babbling.length; i++) {
+            for(int j=0; j<result.size(); j++) {
+                    if(babbling[i].equals(result.get(j))) {
+                        answer++;
+                    }      
             }
         }
-		
-        answer = result1.length;
         
-        System.out.println(answer);
-	}
-
+        
+        return answer;
+    }
 }
