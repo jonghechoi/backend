@@ -11,6 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import book_db.BookDao;
 import book_mgm_ui_system.BookMgmSystem;
 
 
@@ -19,7 +20,8 @@ public class BookMgmUI extends JFrame{
 	//Field
 	//도서관리 시스템 클래스 bms; //도서관리 시스템 정의
 	// 전체 시스템에서 객체는 bms 딱 하나만 생성하고, 종료되면 이 객체가 사라질 수 있도록 
-	BookMgmSystem bms;
+//	BookMgmSystem bms;
+	BookDao dao;
 	BookMgmEvent event_object;	//이벤트 처리 클래스
 	
 	String[] menulist = {"도서 등록","도서 조회","도서 검색","도서 수정","도서 삭제","나가기"};
@@ -45,7 +47,8 @@ public class BookMgmUI extends JFrame{
 	public void init() {
 		setTitle("도서 관리 시스템");
 		//도서관리 시스템 생성
-		bms = new BookMgmSystem();
+//		bms = new BookMgmSystem();
+		dao = new BookDao();
 		event_object = new BookMgmEvent(this);
 		
 		title_panel = new JPanel(new BorderLayout());

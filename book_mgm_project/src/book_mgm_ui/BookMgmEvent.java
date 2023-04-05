@@ -7,12 +7,13 @@ import java.awt.event.WindowEvent;
 
 import javax.swing.JOptionPane;
 
-import book_mgm_ui_system.BookMgmSystem;
+import book_db.BookDao;
 
 public class BookMgmEvent extends WindowAdapter implements ActionListener{
 	//Field
 	BookMgmUI ui;
-	BookMgmSystem bms;
+//	BookMgmSystem bms;
+	BookDao dao;
 	
 //	public static UpdateUI updateui;
 //	DeleteUI deleteui;
@@ -22,7 +23,8 @@ public class BookMgmEvent extends WindowAdapter implements ActionListener{
 	public BookMgmEvent(BookMgmUI ui) {
 		this.ui = ui;
 		// 싱글턴 패턴으로 갈거라서 새로운 객체 생성 안하고 ui 객체에서 가져옴
-		this.bms = ui.bms;
+//		this.bms = ui.bms;
+		this.dao = ui.dao;
 	}
 	
 	//Method
@@ -41,13 +43,17 @@ public class BookMgmEvent extends WindowAdapter implements ActionListener{
 			new DeleteUI(ui);
 		}else if(obj == ui.button_list.get(5)) {
 			int result = JOptionPane.showConfirmDialog(null, "정말로 종료하시겠습니까?");
-			if(result==0)  System.exit(0);
+			if(result==0) {
+				ui.dao.close();
+				System.exit(0);
+			}
 		}
 		
 	}
 	
 	public void	windowClosing(WindowEvent e) {
 		//System.out.println("------- 프로그램 종료 ----------");
+		ui.dao.close();
 		System.exit(0);
 	}
 	

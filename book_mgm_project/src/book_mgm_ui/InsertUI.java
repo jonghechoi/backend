@@ -14,8 +14,8 @@ import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JTextField;
 
-import book_mgm_ui_system.BookMgmSystem;
-import book_mgm_ui_system.BookVo;
+import book_db.BookDao;
+import book_db.BookVo;
 
 
 public class InsertUI implements ActionListener{
@@ -23,7 +23,8 @@ public class InsertUI implements ActionListener{
 	BookMgmUI ui;
 	Random rad;
 	//도서 관리 시스템 정의
-	BookMgmSystem bms;
+//	BookMgmSystem bms;
+	BookDao dao;
 	JButton btn_insert, btn_cancel;
 	ArrayList<JTextField> tf_list;
 	
@@ -31,7 +32,8 @@ public class InsertUI implements ActionListener{
 	public InsertUI() {}
 	public InsertUI(BookMgmUI ui) {
 		this.ui = ui;
-		this.bms = ui.bms;
+//		this.bms = ui.bms;
+		this.dao = ui.dao;
 		//도서관리 시스템 전역변수에 로컬변수 set
 		init();		
 	}
@@ -115,8 +117,8 @@ public class InsertUI implements ActionListener{
 			book.setAuthor(tf_list.get(2).getText());
 			book.setPrice(Integer.parseInt(tf_list.get(3).getText()));
 			
-			boolean result = bms.insert(book);
-			
+//			boolean result = bms.insert(book);
+			boolean result = dao.insert(book);
 			
 			if(result) {
 				JOptionPane.showMessageDialog(null,"등록성공~");
