@@ -2,8 +2,14 @@ package book_db;
 
 public class BookVo {
 	int rno, price;
-	String isbn, title, author, bdate;
-	
+	String isbn, title, author, bdate, sprice;
+
+	public String getSprice() {
+		return sprice;
+	}
+	public void setSprice(String sprice) {
+		this.sprice = sprice;
+	}
 	public int getRno() {
 		return rno;
 	}

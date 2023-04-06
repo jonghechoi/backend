@@ -1,6 +1,7 @@
 package book_mgm_ui;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.Panel;
@@ -25,7 +26,7 @@ public class InsertUI implements ActionListener{
 	//도서 관리 시스템 정의
 //	BookMgmSystem bms;
 	BookDao dao;
-	JButton btn_insert, btn_cancel;
+	JButton btn_insert, btn_cancel, isbn_check;
 	ArrayList<JTextField> tf_list;
 	
 	//Constructor
@@ -53,6 +54,7 @@ public class InsertUI implements ActionListener{
 		title_panel.add(title);
 		btn_insert = new JButton("등록완료");
 		btn_cancel = new JButton("다시쓰기");
+		isbn_check = new JButton("중복체크");
 		btn_panel.add(btn_insert);
 		btn_panel.add(btn_cancel);
 				
@@ -64,6 +66,13 @@ public class InsertUI implements ActionListener{
 			JTextField tf = new JTextField(15);
 			name_panel.add(label);
 			t_panel.add(tf);
+			if(name.trim().equals("ISBN")) {
+				t_panel.add(isbn_check);
+			}else {
+				JLabel jl = new JLabel("000000000000");
+				jl.setForeground(new Color(238,238,238));
+				t_panel.add(jl);
+			}
 			label_panel.add(name_panel);
 			tf_panel.add(t_panel);	
 			tf_list.add(tf);
@@ -85,6 +94,7 @@ public class InsertUI implements ActionListener{
 		btn_insert.addActionListener(this);
 		btn_cancel.addActionListener(this);
 		tf_list.get(3).addActionListener(this);
+		isbn_check.addActionListener(this);
 	}//init
 	
 	public String createIsbn() {
@@ -150,7 +160,6 @@ public class InsertUI implements ActionListener{
 		return result;
 	}
 	
-		
 	/** 
 	 * 내용 : 등록, 취소 버튼 이벤트 처리 
 	 */
@@ -161,6 +170,21 @@ public class InsertUI implements ActionListener{
 			new InsertUI(ui);
 		}else if(obj == btn_cancel) {			
 			tf_list.forEach(tf -> {tf.setText("");});	//람다식 표현
+		}else if(obj == isbn_check) {
+			/**
+			 * 중복체크 버튼 눌렀을때 validation check 실행 메소드
+			 * 1. 기존에 있는 isbn과 비교해서 (db에 group함수인 count 이용해서 int값 출력해보자)
+			 * 	-> 없다면 joptionpanel 메시지창 뜨면서 그대로 진행할건지 물어보기 
+			 * 	-> 있으면(count가 1이면) 메시지창 뜨면서 다시할건지 물어보기
+			 * 		-> 다시 한다면 createIsbn() 메소드 실행해서 다시 값 넣기
+			 */
+			int result = dao.getCheckResult(tf_list.get(0).getText());
+			if(result == 0) {
+				JOptionPane.showConfirmDialog(null, "사용가능합니다. 계속진행할까요?", "확인메시지창", 0);
+			}else {
+				int check = JOptionPane.showConfirmDialog(null, "이미 사용중인 ISBN입니다. 다시 생성하시겠습니까?", "확인메시지창", 0);
+				if(check==0) init();
+			}		
 		}
 	}
 

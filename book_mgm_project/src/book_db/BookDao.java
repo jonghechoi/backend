@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.Statement;
+import java.util.ArrayList;
 
 public class BookDao {
 	// Field
@@ -16,8 +17,8 @@ public class BookDao {
 	
 	Connection conn;
 	Statement stmt;
-	PreparedStatement pstmt;
-	ResultSet rs;
+	public PreparedStatement pstmt;
+	public ResultSet rs;
 	ResultSetMetaData rsmd;
 
 	// Constructor
@@ -80,7 +81,68 @@ public class BookDao {
 		}
 		return result;
 	}
-	public void select() {}
+	
+	// 전체 도서 조회
+	public ArrayList<BookVo> select() {
+		ArrayList<BookVo> list = new  ArrayList<BookVo>();
+		// TO_CHAR로 인해 PRICE가 Int->String으로 변함
+		// BookVo까지 바꿔줘야 함
+		// 이때 BookVo 한가지 명심해야 할 것이 Vo는 프로그래밍을 편하게 하기 위한 도구이므로 더 다른 필드
+		// 추가해도됨. -> sprice 하나 더 만들어서 여기에 원본데이터와는 다른 출력용 필드 하나 더 만들어주자!
+		String sql = "  SELECT ROWNUM RNO, ISBN, TITLE, AUTHOR, PRICE, " +
+				"  to_char(PRICE, 'L999,999') SPRICE, " +
+				"  to_char(BDATE, 'YY-MM-DD')" + 
+				"  FROM (SELECT ISBN, TITLE, AUTHOR, PRICE, BDATE" + 
+				"          FROM  BOOK" + 
+				"          ORDER BY BDATE DESC)";
+		// StringBuffer 활용
+		StringBuffer sb = new StringBuffer(300);
+		sb.append("  SELECT ROWNUM RNO, ISBN, TITLE, AUTHOR, PRICE, ");
+		sb.append("  to_char(PRICE, 'L999,999') SPRICE, ");
+		sb.append("  to_char(BDATE, 'YY-MM-DD')");
+		sb.append("  FROM (SELECT ISBN, TITLE, AUTHOR, PRICE, BDATE");
+		sb.append("          FROM  BOOK");
+		sb.append("          ORDER BY BDATE DESC)");
+		System.out.println(sb.toString());
+		try {
+			getPreparedStatement(sb.toString());
+			
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				BookVo book = new BookVo();
+				book.setRno(rs.getInt(1));
+				book.setIsbn(rs.getString(2));
+				book.setTitle(rs.getString(3));
+				book.setAuthor(rs.getString(4));
+				book.setSprice(rs.getString(6));
+				book.setBdate(rs.getString(7));
+				list.add(book);
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		
+		return list;
+	}
+	
+	public int getCheckResult(String isbn) {
+		int result = 0;
+		StringBuffer sb = new StringBuffer(100);
+		sb.append("SELECT COUNT(ISBN) FROM BOOK WHERE ISBN = '" + isbn + "'");
+		
+		try {
+			getPreparedStatement(sb.toString());
+			rs = pstmt.executeQuery();
+			rs.next();
+			result = rs.getInt(1);
+		}catch (Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	
+	
 	public void search() {}
 	public void update() {}
 	public void delete() {}
