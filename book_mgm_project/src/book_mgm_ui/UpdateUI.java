@@ -5,6 +5,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -12,32 +13,49 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-import book_mgm_ui_system.BookMgmSystem;
-import book_mgm_ui_system.BookVo;
+import book_db.BookDao;
+import book_db.BookVo;
 
 
 public class UpdateUI implements ActionListener{
 	//Field
 	//도서 관리 시스템 정의
-	BookMgmSystem bms;
+//	BookMgmSystem bms;
+	BookDao dao;
 	BookMgmUI ui;
 	JTextField isbn_tf;
 	JButton btn_search, btn_update, btn_reset;
 	ArrayList<JTextField> tf_list;
+	String item, data; // 이전 페이지 버튼 호출시 사용할 매개변수
 	
 	//Constructor
 	public UpdateUI() {}
+	
 	public UpdateUI(BookMgmUI ui) {
 		this.ui = ui;
 		//도서관리 시스템 전역변수에 로컬변수 set
-		this.bms = ui.bms;
+//		this.bms = ui.bms;
+		this.dao = ui.dao;
 		init();
 	}
 	
-	public UpdateUI(BookMgmUI ui, BookVo book) {
+	public UpdateUI(BookMgmUI ui, String isbn) {
 		this.ui = ui;
-		this.bms = ui.bms;
+//		this.bms = ui.bms;
+		this.dao = ui.dao;
+		BookVo book = dao.search(isbn);
 		init(book);
+	}
+	
+	public UpdateUI(HashMap param) {
+		// hashmap에 넣을때 모두 object 타입으로 넣었음
+		// 꺼낼 때는 다시 자식 클래스로 명시적 형변환이 필요
+		BookMgmUI ui = (BookMgmUI)param.get("ui"); 
+		this.ui = ui;
+		this.dao = ui.dao;
+		this.item = (String)param.get("item");
+		this.data = (String)param.get("data");
+		init(dao.search((String)param.get("isbn")));
 	}
 	
 	public void init() {
@@ -135,7 +153,7 @@ public class UpdateUI implements ActionListener{
 	public void search_proc() {
 		if(validationCheck()) {
 			/* ISBN으로 검색하여 도서가 존재하면 도서데이터객체를 반환 받아 수정폼에 set */
-			BookVo book = bms.search(isbn_tf.getText());
+			BookVo book = dao.search(isbn_tf.getText().trim().toUpperCase());
 			if(book != null) {
 				tf_list.get(0).setText(book.getIsbn());
 				tf_list.get(0).setEditable(false);
@@ -167,16 +185,18 @@ public class UpdateUI implements ActionListener{
 	 */
 	public void update_proc() {
 		/* 수정할 도서가 존재하면 수정 도서 정보를 입력 한후 도서관리 시스템에서 update 진행*/
-		BookVo ubook = new BookVo();
-		ubook.setIsbn(tf_list.get(0).getText());
-		ubook.setTitle(tf_list.get(1).getText());
-		ubook.setAuthor(tf_list.get(2).getText());
-		ubook.setPrice(Integer.parseInt(tf_list.get(3).getText()));
+		BookVo book = new BookVo();
+		book.setIsbn(tf_list.get(0).getText());
+		book.setTitle(tf_list.get(1).getText());
+		book.setAuthor(tf_list.get(2).getText());
+		book.setPrice(Integer.parseInt(tf_list.get(3).getText()));
 
-		boolean result = bms.update(ubook);
-		if(result) {
+		int result = dao.update(book);
+		if(result == 1) {
 			JOptionPane.showMessageDialog(null, "수정이 완료되었습니다");
 			new SelectUI(ui);
+		}else {
+			JOptionPane.showMessageDialog(null, "수정이 실패했습니다");
 		}
 	}
 	
@@ -200,19 +220,3 @@ public class UpdateUI implements ActionListener{
 	}
 	
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

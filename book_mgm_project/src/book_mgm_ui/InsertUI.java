@@ -183,7 +183,7 @@ public class InsertUI implements ActionListener{
 				JOptionPane.showConfirmDialog(null, "사용가능합니다. 계속진행할까요?", "확인메시지창", 0);
 			}else {
 				int check = JOptionPane.showConfirmDialog(null, "이미 사용중인 ISBN입니다. 다시 생성하시겠습니까?", "확인메시지창", 0);
-				if(check==0) init();
+				if(check==0) tf_list.get(0).setText(createIsbn());
 			}		
 		}
 	}

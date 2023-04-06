@@ -4,9 +4,13 @@ import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.swing.JButton;
-import javax.swing.JLabel;
+import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
@@ -14,15 +18,16 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 
-import book_mgm_ui_system.BookMgmSystem;
-import book_mgm_ui_system.BookVo;
+import book_db.BookDao;
+import book_db.BookVo;
 
 
 public class SearchUI implements ActionListener{
 	//Field
 	//도서 관리 시스템 정의
 	//도서정보를 저장하는 데이터 객체 정의
-	BookMgmSystem bms;
+//	BookMgmSystem bms;
+	BookDao dao;
 	BookMgmUI ui;	
 	JTextField isbn_tf;
 	JButton btn_search, btn_update, btn_delete;
@@ -32,12 +37,17 @@ public class SearchUI implements ActionListener{
 	JTable table = new JTable(model);
 	Object[] row = new Object[6];
 	BookVo book; // 검색결과, 수정하기, 삭제하기 버튼 사용
+	ArrayList<BookVo> bookList;
+	int selectRow;
+	String[] itemList = {"ISBN","TITLE","AUTHOR"};
+	JComboBox comboList;
 	
 	//Constructor
 	public SearchUI() {}
 	public SearchUI(BookMgmUI ui) {
 		this.ui = ui;
-		this.bms = ui.bms;
+//		this.bms = ui.bms;
+		this.dao = ui.dao;
 		//도서관리 시스템 전역변수에 로컬변수 set
 		init();		
 	}
@@ -48,10 +58,11 @@ public class SearchUI implements ActionListener{
 		ui.search_panel.setLayout(new BorderLayout());
 		
 		JPanel search_panel = new JPanel(); //학생명라벨, 학생이름입력, 검색 버튼
-		JLabel name_label = new JLabel("ISBN");
+//		JLabel name_label = new JLabel("ISBN");
+		comboList = new JComboBox(itemList);
 		isbn_tf = new JTextField(20);
 		btn_search = new JButton("search");
-		search_panel.add(name_label);
+		search_panel.add(comboList);
 		search_panel.add(isbn_tf);
 		search_panel.add(btn_search);	
 		
@@ -77,8 +88,26 @@ public class SearchUI implements ActionListener{
 		isbn_tf.addActionListener(this);
 		btn_update.addActionListener(this);
 		btn_delete.addActionListener(this);
+		
+		table.addMouseListener(new MouseListener() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				selectRow = table.getSelectedRow();				
+			}
+			
+			@Override
+			public void mouseEntered(MouseEvent e) {}
+			
+			@Override
+			public void mouseExited(MouseEvent e) {}
+			
+			@Override
+			public void mousePressed(MouseEvent e) {}
+			
+			@Override
+			public void mouseReleased(MouseEvent e) {}
+		});
 	}
-	
 	
 	/**
 	 * 내용 : 입력한 학생명을 검색하여 결과 출력하는 기능
@@ -86,20 +115,24 @@ public class SearchUI implements ActionListener{
 	public void search_proc() {
 		if(validationCheck()) {
 			/* ISBN으로 검색하여 도서가 존재하면 도서데이터객체를 반환 */
-			book = bms.search(isbn_tf.getText());
-			
+			// 와일드카드 문자를 활용하여 도서 검색 - 검색 결과에 따라 여러권 출력 가능하도록!!
+			String item = (String)comboList.getSelectedItem(); // 명시적형변환
+			bookList = dao.search(item, isbn_tf.getText().toUpperCase());
 			int no = 1;
-			if(book != null) {
+			if(bookList.size() != 0) {
 				jp.setVisible(true);
 				
-				DefaultTableModel model = new DefaultTableModel(colNames, 0);				
-				row[0] = no;
-				row[1] = book.getIsbn();
-				row[2] = book.getTitle();
-				row[3] = book.getAuthor();
-				row[4] = book.getPrice();
+				DefaultTableModel model = new DefaultTableModel(colNames, 0);
+				for(BookVo book : bookList) {
+					row[0] = book.getRno();
+					row[1] = book.getIsbn();
+					row[2] = book.getTitle();
+					row[3] = book.getAuthor();
+					row[4] = book.getSprice();
+					
+					model.addRow(row);	
+				}
 				
-				model.addRow(row);
 				model.fireTableDataChanged();
 				
 				table.setModel(model);
@@ -125,7 +158,6 @@ public class SearchUI implements ActionListener{
 		}else {
 			result = true;
 		}
-		
 		return result;
 	}
 	
@@ -139,10 +171,16 @@ public class SearchUI implements ActionListener{
 		if(obj == btn_search || obj == isbn_tf) {
 			search_proc();
 		}else if(obj == btn_update) {
-//			BookMgmEvent.updateui.init();
-			new UpdateUI(ui, book);
+			HashMap param = new HashMap();
+			param.put("ui", ui);
+			param.put("isbn", bookList.get(selectRow).getIsbn());
+			param.put("item", (String)comboList.getSelectedItem());
+			param.put("data", isbn_tf.getText().toUpperCase());
+			
+//			new UpdateUI(ui, bookList.get(selectRow).getIsbn());
+			new UpdateUI(param);
 		}else if(obj == btn_delete) {
-			new DeleteUI(ui, book);
+			new DeleteUI(ui, bookList.get(selectRow).getIsbn());
 		}
 	}
 	

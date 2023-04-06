@@ -17,8 +17,8 @@ public class BookDao {
 	
 	Connection conn;
 	Statement stmt;
-	public PreparedStatement pstmt;
-	public ResultSet rs;
+	PreparedStatement pstmt;
+	ResultSet rs;
 	ResultSetMetaData rsmd;
 
 	// Constructor
@@ -142,10 +142,96 @@ public class BookDao {
 		return result;
 	}
 	
+	public ArrayList<BookVo> search(String item,String data) {
+//		System.out.println("item --------------->  " + item + ", isbn -----> " + isbn);
+		ArrayList<BookVo> list = new ArrayList<BookVo>();
+		StringBuffer sql = new StringBuffer(100);
+		sql.append("SELECT ROWNUM RNO, ISBN, TITLE, AUTHOR, PRICE, SPRICE, BDATE");
+		sql.append(" FROM (SELECT ISBN, TITLE, AUTHOR, PRICE, TO_CHAR(PRICE, 'L999,999') SPRICE, BDATE FROM BOOK");
+//		sql.append(" WHERE ISBN LIKE '%" + data + "%' ORDER BY BDATE DESC)");
+
+		if(item.equals("ISBN")) {
+			sql.append(" WHERE ISBN LIKE '%" + data + "%' ORDER BY BDATE DESC)");
+		}else if(item.equals("TITLE")) {
+			sql.append(" WHERE TITLE LIKE '%" + data + "%' ORDER BY BDATE DESC)");
+		}else if(item.equals("AUTHOR")) {
+			sql.append(" WHERE AUTHOR LIKE '%" + data + "%' ORDER BY BDATE DESC)");
+		}
+		
+		try {
+			getPreparedStatement(sql.toString());
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				BookVo book = new BookVo();
+				book.setRno(rs.getInt(1));
+				book.setIsbn(rs.getString(2));
+				book.setTitle(rs.getString(3));
+				book.setAuthor(rs.getString(4));
+				book.setSprice(rs.getString(6));
+				book.setBdate(rs.getString(7));
+				list.add(book);
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
 	
-	public void search() {}
-	public void update() {}
-	public void delete() {}
+	public BookVo search(String isbn) {
+		BookVo book = null;
+		StringBuffer sql = new StringBuffer(100);
+		sql.append("SELECT ISBN, TITLE, AUTHOR, PRICE FROM BOOK ");
+		sql.append(" where isbn = ?");
+		try {
+			getPreparedStatement(sql.toString());
+			pstmt.setString(1, isbn);
+			rs = pstmt.executeQuery();
+			while(rs.next()) {
+				book = new BookVo();
+				book.setIsbn(rs.getString(1));
+				book.setTitle(rs.getString(2));
+				book.setAuthor(rs.getString(3));
+				book.setSprice(rs.getString(4));
+			}
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return book;
+	}
+	
+	public int update(BookVo book) {
+		int result = 0;
+		StringBuffer sql = new StringBuffer(200);
+		sql.append(" update book set title=?, author=?, price=?");
+		sql.append(" where  isbn=?");
+		try {
+			getPreparedStatement(sql.toString());
+			pstmt.setString(1, book.getTitle());
+			pstmt.setString(2, book.getAuthor());
+			pstmt.setInt(3, book.getPrice());
+			pstmt.setString(4, book.getIsbn());
+			result = pstmt.executeUpdate();
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		return result;
+	}
+	public boolean delete(BookVo book) {
+		boolean result = false;
+		
+		StringBuffer sql = new StringBuffer();
+		sql.append("DELETE FROM BOOK WHERE ISBN=?");
+		
+		try {
+			getPreparedStatement(sql.toString());
+			pstmt.setString(1, book.getIsbn());
+			if(pstmt.executeUpdate()==1) result = true;
+		}catch(Exception e) {
+			e.printStackTrace();
+		}
+		
+		return result;
+	}
 	
 	public void close() {
 		try {
