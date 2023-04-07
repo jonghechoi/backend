@@ -54,9 +54,7 @@ public class UpdateUI implements ActionListener{
 		this.ui = ui;
 		this.dao = ui.dao;
 		this.item = (String)param.get("item");
-		System.out.println("2 --> "+this.item);
 		this.data = (String)param.get("data");
-		System.out.println("3 --> "+this.data);
 		init(dao.search((String)param.get("isbn")));
 	}
 	
@@ -225,7 +223,6 @@ public class UpdateUI implements ActionListener{
 			param.put("ui", ui);
 			param.put("item", item);
 			param.put("data", data);
-			System.out.println("UpdateUIÀÇ item --> "+ item +" data --> "+data);
 			new SearchUI(param);
 		}
 	}

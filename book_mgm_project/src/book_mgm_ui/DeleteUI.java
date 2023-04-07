@@ -5,6 +5,7 @@ import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -22,8 +23,9 @@ public class DeleteUI implements ActionListener{
 	BookDao dao;
 	BookMgmUI ui;
 	JTextField isbn_tf;
-	JButton btn_search, btn_delete, btn_reset;
+	JButton btn_search, btn_delete, btn_reset, btn_prev;
 	ArrayList<JTextField> tf_list;
+	String item, data;
 	
 	//Constructor
 	public DeleteUI() {}
@@ -33,7 +35,13 @@ public class DeleteUI implements ActionListener{
 //		this.bms = ui.bms;
 		//도서관리 시스템 전역변수에 로컬변수 set
 		init();
-		
+	}
+	public DeleteUI(HashMap param) {
+		this.ui = (BookMgmUI)param.get("ui");
+		this.dao = ui.dao;
+		this.item = (String)param.get("item");
+		this.data = (String)param.get("data");
+		init(dao.search((String)param.get("isbn")));		
 	}
 	
 	public DeleteUI(BookMgmUI ui, String isbn) {
@@ -97,6 +105,7 @@ public class DeleteUI implements ActionListener{
 		
 		btn_search.addActionListener(this);
 		isbn_tf.addActionListener(this);
+		if(item==null) btn_prev.setVisible(false);
 	}//init
 	
 	/**
@@ -124,8 +133,10 @@ public class DeleteUI implements ActionListener{
 		
 		btn_delete = new JButton("삭제완료");
 		btn_reset = new JButton("취소하기");
+		btn_prev = new JButton("이전페이지");
 		btn_panel.add(btn_delete);
 		btn_panel.add(btn_reset);
+		btn_panel.add(btn_prev);
 		
 		up_panel.add(label_panel, BorderLayout.WEST);
 		up_panel.add(tf_panel, BorderLayout.CENTER);
@@ -133,6 +144,7 @@ public class DeleteUI implements ActionListener{
 		
 		btn_delete.addActionListener(this);
 		btn_reset.addActionListener(this);
+		btn_prev.addActionListener(this);
 		
 		return up_panel;		
 	}
@@ -198,6 +210,12 @@ public class DeleteUI implements ActionListener{
 			isbn_tf.setText("");			
 			tf_list.forEach(tf -> {tf.setText("");});
 			isbn_tf.requestFocus();
+		}else if(obj == btn_prev) {
+			HashMap param = new HashMap();
+			param.put("ui", ui);
+			param.put("item", item);
+			param.put("data", data);
+			new SearchUI(param);
 		}
 	}
 	

@@ -268,16 +268,20 @@ public class SearchUI implements ActionListener{
 		}else if(obj == btn_update) {
 			HashMap param = new HashMap();
 			param.put("ui", ui);
-			System.out.println("1 --> " + bookList.get(selectRow).getIsbn());
 			param.put("isbn", bookList.get(selectRow).getIsbn());
 			param.put("item", (String)comboList.getSelectedItem());
 			param.put("data", isbn_tf.getText().toUpperCase());
 			
-			System.out.println("item --> "+param.get("item")+"data -->"+param.get("data"));
-//			new UpdateUI(ui, bookList.get(selectRow).getIsbn());
 			new UpdateUI(param);
 		}else if(obj == btn_delete) {
-			new DeleteUI(ui, bookList.get(selectRow).getIsbn());
+//			new DeleteUI(ui, bookList.get(selectRow).getIsbn());
+			HashMap param = new HashMap();
+			param.put("ui", ui);
+			param.put("isbn", bookList.get(selectRow).getIsbn());
+			param.put("item", (String)comboList.getSelectedItem());
+			param.put("data", isbn_tf.getText().toUpperCase());
+			
+			new DeleteUI(param);
 		}
 	}
 	
