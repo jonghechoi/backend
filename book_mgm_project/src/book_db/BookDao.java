@@ -103,7 +103,6 @@ public class BookDao {
 		sb.append("  FROM (SELECT ISBN, TITLE, AUTHOR, PRICE, BDATE");
 		sb.append("          FROM  BOOK");
 		sb.append("          ORDER BY BDATE DESC)");
-		System.out.println(sb.toString());
 		try {
 			getPreparedStatement(sb.toString());
 			
@@ -143,13 +142,10 @@ public class BookDao {
 	}
 	
 	public ArrayList<BookVo> search(String item,String data) {
-//		System.out.println("item --------------->  " + item + ", isbn -----> " + isbn);
 		ArrayList<BookVo> list = new ArrayList<BookVo>();
 		StringBuffer sql = new StringBuffer(100);
 		sql.append("SELECT ROWNUM RNO, ISBN, TITLE, AUTHOR, PRICE, SPRICE, BDATE");
 		sql.append(" FROM (SELECT ISBN, TITLE, AUTHOR, PRICE, TO_CHAR(PRICE, 'L999,999') SPRICE, BDATE FROM BOOK");
-//		sql.append(" WHERE ISBN LIKE '%" + data + "%' ORDER BY BDATE DESC)");
-
 		if(item.equals("ISBN")) {
 			sql.append(" WHERE ISBN LIKE '%" + data + "%' ORDER BY BDATE DESC)");
 		}else if(item.equals("TITLE")) {
@@ -238,7 +234,6 @@ public class BookDao {
 			if(rs != null) rs.close();
 			if(stmt != null) stmt.close();
 			if(conn != null) conn.close();
-			System.out.println("---------------------> Dao Á¾·á");
 		}catch (Exception e) {
 			e.printStackTrace();
 		}

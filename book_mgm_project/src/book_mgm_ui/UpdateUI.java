@@ -24,7 +24,7 @@ public class UpdateUI implements ActionListener{
 	BookDao dao;
 	BookMgmUI ui;
 	JTextField isbn_tf;
-	JButton btn_search, btn_update, btn_reset;
+	JButton btn_search, btn_update, btn_reset, btn_prev;
 	ArrayList<JTextField> tf_list;
 	String item, data; // 이전 페이지 버튼 호출시 사용할 매개변수
 	
@@ -54,7 +54,9 @@ public class UpdateUI implements ActionListener{
 		this.ui = ui;
 		this.dao = ui.dao;
 		this.item = (String)param.get("item");
+		System.out.println("2 --> "+this.item);
 		this.data = (String)param.get("data");
+		System.out.println("3 --> "+this.data);
 		init(dao.search((String)param.get("isbn")));
 	}
 	
@@ -134,8 +136,10 @@ public class UpdateUI implements ActionListener{
 		
 		btn_update = new JButton("수정완료");
 		btn_reset = new JButton("다시쓰기");
+		btn_prev = new JButton("이전으로");
 		btn_panel.add(btn_update);
 		btn_panel.add(btn_reset);
+		btn_panel.add(btn_prev);
 		
 		up_panel.add(label_panel, BorderLayout.WEST);
 		up_panel.add(tf_panel, BorderLayout.CENTER);
@@ -143,6 +147,7 @@ public class UpdateUI implements ActionListener{
 		
 		btn_update.addActionListener(this);
 		btn_reset.addActionListener(this);
+		btn_prev.addActionListener(this);
 		
 		return up_panel;		
 	}
@@ -212,10 +217,16 @@ public class UpdateUI implements ActionListener{
 			update_proc();
 		}else if(obj == btn_reset) {
 			isbn_tf.setText("");
-			for(JTextField tf : tf_list) {
-				tf.setText("");
-			}
+			for(JTextField tf : tf_list) tf.setText("");			
 			isbn_tf.requestFocus();
+		}else if(obj == btn_prev) {
+			// 매개변수가 많으면 객체로 묶어서 보내기
+			HashMap param = new HashMap();
+			param.put("ui", ui);
+			param.put("item", item);
+			param.put("data", data);
+			System.out.println("UpdateUI의 item --> "+ item +" data --> "+data);
+			new SearchUI(param);
 		}
 	}
 	
