@@ -2,6 +2,7 @@ package array_examples;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -10,7 +11,7 @@ public class ArrayExamples {
 	public static void main(String[] args) {
 		// List
 		List<String> list = List.of("A", "AB", "ABC");
-		System.out.println(list);
+//		System.out.println(list);
 		
 		/*
 		 * ArrayList 객체를 List타입으로 받는 이유는??
@@ -26,11 +27,12 @@ public class ArrayExamples {
         aList.add("A");
         aList.add("AB");
         aList.add("ABC");
-        System.out.println(aList);
+//        System.out.println(aList.getClass());
         
         // Arrays.toString(str)
         String[] str = {"A", "B", "C"}; 
-        System.out.println(Arrays.toString(str));
+        System.out.println(str);
+//        System.out.println(Arrays.toString(str));
         
         // 
 		List<String> words = Arrays.asList("apple", "banana", "orange", "pear", "watermelon");
@@ -38,8 +40,13 @@ public class ArrayExamples {
 		List<String> longWords = words.stream()
 		                              .filter(string -> string.length() >= 5)
 		                              .collect(Collectors.toList());
-		System.out.println(longWords);
+//		System.out.println(longWords);
+		
+		// 배열에서 특정 문자열 변경
+		List<String> strList = new ArrayList<String>();
+		String[] city = {"서울", "전주", "제주"};
+		strList.addAll(Arrays.asList(city));
+		System.out.println(strList);
 
 	}
-
 }
