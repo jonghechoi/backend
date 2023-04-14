@@ -47,6 +47,34 @@ public class ArrayExamples {
 		String[] city = {"서울", "전주", "제주"};
 		strList.addAll(Arrays.asList(city));
 		System.out.println(strList);
+		
+		// Arrays.asList()로 반환된 객체는 ArrayList가 아닌 Arrays$ArrayList 클래스의 인스턴스이기 때문에
+		// 요소를 추가/삭제 할 수 없다
+		// 따라서 ArrayList로 변환해야 한다
+//		List<String> aaa = Arrays.asList("1", "2", "3", "4", "5");
+		List<String> bbb = new ArrayList<String>(Arrays.asList("1", "2", "3", "4", "5"));
+		String[] ccc = {"6", "7", "8"};
+		bbb.addAll(Arrays.asList(ccc));
+//		System.out.println(bbb);
+		
+		List<String> ddd = bbb.stream()
+							  .filter(i -> Integer.valueOf(i) >= 5)
+							  .collect(Collectors.toList());
+		System.out.println("ddd --> " + ddd);
+		
+		System.out.println(Math.max(15, 10));
+		System.out.println(Integer.compare(10, 20));
+		System.out.println(Integer.compare(20, 10));
+		System.out.println(Integer.compare(30, 30));
+		
+		System.out.println("maxInt : " + "-".repeat(30));
+		
+		List<String> listTest = new ArrayList<String>(Arrays.asList("A", "AB", "ABC,"));
+		Object[] objTest = listTest.toArray();
+		
+		List<Object> listTest2 = Arrays.asList(objTest);
+		
+		System.out.println(listTest2);
 
 	}
 }
