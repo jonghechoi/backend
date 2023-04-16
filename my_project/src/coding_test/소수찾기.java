@@ -27,7 +27,6 @@ public class 소수찾기 {
 
     // dfs 재귀로 구현. 가능한 숫자 조합 찾고 소수면 set에 추가
     public static void recursion(String str, int idx){
-        System.out.println("재귀 str:"+str+", idx: "+idx);
         
         int num;
         if(str!=""){
@@ -46,12 +45,10 @@ public class 소수찾기 {
         for(int i=0;i<arr.length;i++){
             if(visited[i]) continue; // 방문한 노드면 넘어감
             visited[i] = true; // 방문
-            System.out.println("for문 i:"+i+", str:"+str+arr[i]);
-            System.out.println("visited : " + Arrays.toString(visited));
+            System.out.println("idx : " + idx + " ---> for문 i:"+i+", str:"+str+arr[i]);
             recursion(str+arr[i], idx+1); // 방문 했을 시 재귀
-            System.out.println("idx : " + idx + ", for문2 i:"+i+", str:"+str);
+            System.out.println("idx : " + idx + " ---> for문[2] i:"+i+", str:"+str+arr[i]);
             visited[i] = false; // 백트래킹
-            System.out.println("visited : " + Arrays.toString(visited));
         }
     }//recursion
     
