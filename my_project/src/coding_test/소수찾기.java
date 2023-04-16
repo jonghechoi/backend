@@ -47,7 +47,7 @@ public class 소수찾기 {
             visited[i] = true; // 방문
             System.out.println("idx : " + idx + " ---> for문 i:"+i+", str:"+str+arr[i]);
             recursion(str+arr[i], idx+1); // 방문 했을 시 재귀
-            System.out.println("idx : " + idx + " ---> for문[2] i:"+i+", str:"+str+arr[i]);
+            System.out.println("idx : " + idx + " ---> for문2 i:"+i+", str:"+str);
             visited[i] = false; // 백트래킹
         }
     }//recursion
