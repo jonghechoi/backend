@@ -1,5 +1,0 @@
-diff a/score_mgm_gui_project/bin/.gitignore b/score_mgm_gui_project/bin/.gitignore	(rejected hunks)
-@@ -0,3 +0 @@
--/score_mgm_oop_arrayList/
- /score_UI/
--/score_db/
